@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roguelike Shooter (Weapons + Objectives)</title>
+    <style>
+      html, body { height: 100%; margin: 0; background: #0b0f14; color: #e6edf3; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+      #app { display: grid; grid-template-columns: 1fr 360px; height: 100%; }
+      #game-wrap { position: relative; overflow: hidden; min-width: 0; }
+      #ui { border-left: 1px solid rgba(255,255,255,0.08); padding: 12px; background: rgba(255,255,255,0.02); overflow:auto; }
+      @media (max-width: 980px) {
+        #app { grid-template-columns: 1fr; grid-template-rows: 55vh 45vh; }
+        #ui { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
+      }
+      h1 { font-size: 14px; margin: 0 0 8px; letter-spacing: 0.02em; opacity: 0.9; }
+      .small { font-size: 12px; opacity: 0.78; line-height: 1.4; }
+      .box { border: 1px solid rgba(255,255,255,0.10); border-radius: 10px; padding: 10px; margin: 10px 0; }
+      .row { display: flex; justify-content: space-between; gap: 8px; }
+      .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        border: 1px solid rgba(255,255,255,0.18); border-bottom-width: 2px; border-radius: 6px; padding: 1px 6px; font-size: 12px;
+        background: rgba(255,255,255,0.04); }
+      .progress { height: 10px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,0.10); }
+      .bar { height: 100%; width: 0%; background: rgba(255,255,255,0.55); }
+      .msg { white-space: pre-wrap; font-size: 12px; opacity: 0.9; }
+      ul { margin: 8px 0 0; padding-left: 18px; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="game-wrap"></div>
+
+      <aside id="ui">
+        <h1>Roguelike Shooter (Weapons + Objectives)</h1>
+
+        <div class="small">
+          <div>Controls:</div>
+          <div>
+            <span class="kbd">WASD</span> move,
+            <span class="kbd">Mouse</span> aim,
+            <span class="kbd">LMB</span> shoot,
+            <span class="kbd">R</span> reload
+          </div>
+          <div>
+            <span class="kbd">F</span> pick up,
+            <span class="kbd">I</span> toggle inventory,
+            stand in <span class="kbd">Exit</span> to go next floor (once objectives are done)
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="row small"><div>Floor</div><div id="floorText">1</div></div>
+          <div class="row small"><div>Weapon</div><div id="weaponText">Pistol</div></div>
+          <div class="row small"><div>Ammo</div><div id="ammoText">12 / 60</div></div>
+        </div>
+
+        <div class="box">
+          <div class="row small"><div>HP</div><div id="hpText">100</div></div>
+          <div class="progress"><div class="bar" id="hpBar"></div></div>
+        </div>
+
+        <div class="box">
+          <div class="row small"><div>Objectives</div><div></div></div>
+          <div class="row small"><div>Loot remaining</div><div id="lootText">0</div></div>
+          <div class="row small"><div>Enemies remaining</div><div id="enemyText">0</div></div>
+        </div>
+
+        <div class="box">
+          <div class="row small"><div>Exit</div><div id="exitText">Not in zone</div></div>
+          <div class="progress"><div class="bar" id="exitBar"></div></div>
+        </div>
+
+        <div class="box">
+          <div class="row"><div class="small">Inventory</div><div class="small"><span class="kbd">I</span></div></div>
+          <div id="invWrap" class="small" style="display:block;">
+            <div id="invEmpty" style="opacity:0.7;">(empty)</div>
+            <ul id="invList"></ul>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="small">Stash (persistent)</div>
+          <div id="stashWrap" class="small">
+            <div id="stashEmpty" style="opacity:0.7;">(empty)</div>
+            <ul id="stashList"></ul>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="small">Status</div>
+          <div id="msg" class="msg"></div>
+        </div>
+
+        <div class="small">
+          Clean-room demo in the genre. Use original assets.
+        </div>
+      </aside>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
