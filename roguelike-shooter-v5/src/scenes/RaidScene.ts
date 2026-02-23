@@ -306,14 +306,15 @@ export class RaidScene extends Phaser.Scene {
     const dt = dtMs / 1000;
     const playerRect = this.player.getBounds();
 
-    this.bullets.children.iterate((child) => {
+    // Use getChildren()+for..of instead of children.iterate to avoid Phaser callback return typing mismatches in CI.
+    for (const child of this.bullets.getChildren()) {
       const b = child as Bullet;
-      if (!b?.active) return;
+      if (!b?.active) continue;
 
-      if (b.getData("owner") !== "enemy") return;
+      if (b.getData("owner") !== "enemy") continue;
 
       const body = b.body as Phaser.Physics.Arcade.Body | null;
-      if (!body) return;
+      if (!body) continue;
 
       // estimate previous position from velocity (prevents tunneling at high speed)
       const prevX = b.x - body.velocity.x * dt;
@@ -322,7 +323,7 @@ export class RaidScene extends Phaser.Scene {
       const line = new Phaser.Geom.Line(prevX, prevY, b.x, b.y);
       const hit = Phaser.Geom.Intersects.LineToRectangle(line, playerRect) || Phaser.Geom.Intersects.RectangleToRectangle(b.getBounds(), playerRect);
 
-      if (!hit) return;
+      if (!hit) continue;
 
       const dmg = Number(b.getData("dmg") ?? 0);
       b.destroy();
@@ -331,15 +332,16 @@ export class RaidScene extends Phaser.Scene {
       this.message = `Hit! -${dmg} HP (${Math.floor(this.playerHp)}/${this.playerHpMax})`;
 
       if (this.playerHp <= 0) this.onDeath();
-    });
+    }
   }
 
   private updateEnemies(now: number) {
     const playerPos: Point = { x: this.player.x, y: this.player.y };
 
-    this.enemies.children.iterate((child) => {
+    // Keep traversal callback-free to avoid EachSetCallback typing differences across Phaser/TS versions.
+    for (const child of this.enemies.getChildren()) {
       const e = child as Enemy;
-      if (!e || !e.active) return true;
+      if (!e || !e.active) continue;
 
       finishReloadIfDue(e.weapon, now);
 
@@ -387,8 +389,7 @@ export class RaidScene extends Phaser.Scene {
       }
 
       e.setRotation(Math.atan2(playerPos.y - e.y, playerPos.x - e.x));
-    return true;
-    });
+    }
   }
 
   private enemyDamage(id: WeaponId): number {
