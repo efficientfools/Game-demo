@@ -306,9 +306,9 @@ export class RaidScene extends Phaser.Scene {
     const dt = dtMs / 1000;
     const playerRect = this.player.getBounds();
 
-    // Use getChildren()+for..of instead of children.iterate to avoid Phaser callback return typing mismatches in CI.
-    for (const child of this.bullets.getChildren()) {
-      const b = child as Bullet;
+    // Snapshot children before iteration so in-loop destroy() cannot affect traversal order.
+    const bullets = this.bullets.getChildren() as Bullet[];
+    for (const b of bullets) {
       if (!b?.active) continue;
 
       if (b.getData("owner") !== "enemy") continue;
@@ -338,9 +338,9 @@ export class RaidScene extends Phaser.Scene {
   private updateEnemies(now: number) {
     const playerPos: Point = { x: this.player.x, y: this.player.y };
 
-    // Keep traversal callback-free to avoid EachSetCallback typing differences across Phaser/TS versions.
-    for (const child of this.enemies.getChildren()) {
-      const e = child as Enemy;
+    // Snapshot children for stable traversal and callback-free typing across Phaser/TS versions.
+    const enemies = this.enemies.getChildren() as Enemy[];
+    for (const e of enemies) {
       if (!e || !e.active) continue;
 
       finishReloadIfDue(e.weapon, now);
