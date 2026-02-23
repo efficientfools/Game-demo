@@ -387,9 +387,8 @@ export class RaidScene extends Phaser.Scene {
       }
 
       e.setRotation(Math.atan2(playerPos.y - e.y, playerPos.x - e.x));
-    });
-    
     return true;
+    });
   }
 
   private enemyDamage(id: WeaponId): number {
