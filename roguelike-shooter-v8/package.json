@@ -1,11 +1,11 @@
 {
   "name": "roguelike-shooter",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.json && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {

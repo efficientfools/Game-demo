@@ -5,6 +5,8 @@ export type UiState = {
   weaponName: string;
   ammoMag: number;
   ammoReserve: number;
+  ammoLabel: string;
+  medkits: number;
   lootRemaining: number;
   enemiesRemaining: number;
   inExitZone: boolean;
@@ -23,6 +25,7 @@ function byId<T extends HTMLElement>(id: string): T {
 const floorText = byId<HTMLDivElement>("floorText");
 const weaponText = byId<HTMLDivElement>("weaponText");
 const ammoText = byId<HTMLDivElement>("ammoText");
+const medkitText = byId<HTMLDivElement>("medkitText");
 
 const hpText = byId<HTMLDivElement>("hpText");
 const hpBar = byId<HTMLDivElement>("hpBar");
@@ -49,7 +52,8 @@ export function setInventoryVisible(visible: boolean) {
 export function renderUi(s: UiState) {
   floorText.textContent = String(s.floor);
   weaponText.textContent = s.weaponName;
-  ammoText.textContent = `${Math.max(0, s.ammoMag)} / ${Math.max(0, s.ammoReserve)}`;
+  ammoText.textContent = `${Math.max(0, s.ammoMag)} / ${Math.max(0, s.ammoReserve)} (${s.ammoLabel})`;
+  medkitText.textContent = String(Math.max(0, s.medkits));
 
   hpText.textContent = `${Math.max(0, Math.floor(s.hp))} / ${Math.floor(s.hpMax)}`;
   const hp01 = s.hpMax <= 0 ? 0 : Math.max(0, Math.min(1, s.hp / s.hpMax));
