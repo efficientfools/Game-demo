@@ -1,0 +1,5 @@
+[build]
+cwd = "roguelike-shooter-v8"
+command = "npm ci && npm run build"
+
+pages_build_output_dir = "roguelike-shooter-v8/dist"
